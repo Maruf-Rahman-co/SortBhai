@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -10,13 +10,14 @@ import { getAlgorithmById } from '@/lib/algorithms';
 import { generateRandomArray, executeSort, SortingStep } from '@/lib/sorters';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Info, Clock, Database, Layers, Code, Server, Shuffle, Settings, Play, Pause, SkipBack, SkipForward, Rewind, FastForward } from 'lucide-react';
+import { ArrowLeft, Info, Clock, Database, Layers, Play, Pause, SkipBack, SkipForward, Rewind, FastForward, Cpu, Scale, Shuffle } from 'lucide-react';
 import { toast } from 'sonner';
 import { Slider } from '@/components/ui/slider';
 
 const Visualizer = () => {
   const { algorithmId } = useParams<{ algorithmId: string }>();
   const algorithm = getAlgorithmById(algorithmId || '');
+  const location = useLocation();
   
   const [arraySize, setArraySize] = useState(30);
   const [array, setArray] = useState<number[]>([]);
@@ -27,6 +28,11 @@ const Visualizer = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Handle scrolling to top when navigating to this page
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
   
   // Initialize visualizer with random array
   useEffect(() => {
@@ -171,59 +177,71 @@ const Visualizer = () => {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div className="col-span-1 md:col-span-2">
-              <motion.div
-                className="glass-card p-4 rounded-lg h-full"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <p className="text-muted-foreground">
-                  {algorithm.description}
-                </p>
-              </motion.div>
-            </div>
-            
-            <div className="col-span-1">
-              <motion.div
-                className="grid grid-cols-2 gap-2"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 }}
-              >
-                <div className="glass-card p-3 rounded-lg flex items-center gap-2">
-                  <Clock size={16} className="text-muted-foreground" />
-                  <div>
-                    <h3 className="text-xs font-medium">Best Case</h3>
-                    <p className="text-sm font-mono text-primary">{algorithm.timeComplexityBest}</p>
+          {/* Algorithm Information Section - Redesigned */}
+          <div className="glass-card p-6 rounded-lg mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="col-span-1 md:col-span-2">
+                <div className="flex flex-col h-full">
+                  <h3 className="text-lg font-medium mb-2 flex items-center gap-2">
+                    <Info size={18} className="text-accent" />
+                    About this Algorithm
+                  </h3>
+                  <p className="text-muted-foreground flex-grow">
+                    {algorithm.description}
+                  </p>
+                  
+                  <div className="flex gap-2 mt-4 flex-wrap">
+                    {algorithm.stable && (
+                      <Badge variant="outline" className="flex items-center gap-1 px-2 py-1">
+                        <Scale size={12} />
+                        Stable
+                      </Badge>
+                    )}
+                    {algorithm.inPlace && (
+                      <Badge variant="outline" className="flex items-center gap-1 px-2 py-1">
+                        <Cpu size={12} />
+                        In-Place
+                      </Badge>
+                    )}
                   </div>
                 </div>
-                
-                <div className="glass-card p-3 rounded-lg flex items-center gap-2">
-                  <Clock size={16} className="text-muted-foreground" />
-                  <div>
-                    <h3 className="text-xs font-medium">Average</h3>
-                    <p className="text-sm font-mono text-primary">{algorithm.timeComplexityAverage}</p>
+              </div>
+              
+              <div className="col-span-1 md:col-span-2">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="complexity-card">
+                    <div className="complexity-header">
+                      <Clock size={14} className="text-accent" />
+                      <span>Best Case</span>
+                    </div>
+                    <div className="complexity-value">{algorithm.timeComplexityBest}</div>
+                  </div>
+                  
+                  <div className="complexity-card">
+                    <div className="complexity-header">
+                      <Clock size={14} className="text-accent" />
+                      <span>Average</span>
+                    </div>
+                    <div className="complexity-value">{algorithm.timeComplexityAverage}</div>
+                  </div>
+                  
+                  <div className="complexity-card">
+                    <div className="complexity-header">
+                      <Clock size={14} className="text-accent" />
+                      <span>Worst Case</span>
+                    </div>
+                    <div className="complexity-value">{algorithm.timeComplexityWorst}</div>
+                  </div>
+                  
+                  <div className="complexity-card">
+                    <div className="complexity-header">
+                      <Database size={14} className="text-accent" />
+                      <span>Space</span>
+                    </div>
+                    <div className="complexity-value">{algorithm.spaceComplexity}</div>
                   </div>
                 </div>
-                
-                <div className="glass-card p-3 rounded-lg flex items-center gap-2">
-                  <Clock size={16} className="text-muted-foreground" />
-                  <div>
-                    <h3 className="text-xs font-medium">Worst Case</h3>
-                    <p className="text-sm font-mono text-primary">{algorithm.timeComplexityWorst}</p>
-                  </div>
-                </div>
-                
-                <div className="glass-card p-3 rounded-lg flex items-center gap-2">
-                  <Database size={16} className="text-muted-foreground" />
-                  <div>
-                    <h3 className="text-xs font-medium">Space</h3>
-                    <p className="text-sm font-mono text-primary">{algorithm.spaceComplexity}</p>
-                  </div>
-                </div>
-              </motion.div>
+              </div>
             </div>
           </div>
           

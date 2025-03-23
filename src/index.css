@@ -109,4 +109,19 @@
   .metric-value {
     @apply font-mono font-medium text-foreground;
   }
+  
+  /* New styles for complexity cards */
+  .complexity-card {
+    @apply bg-background/50 rounded-lg border border-border/40 p-3 transition-all duration-300 hover:shadow-lg hover:border-accent/30;
+  }
+  
+  .complexity-header {
+    @apply flex items-center gap-2 mb-2;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  
+  .complexity-value {
+    @apply font-mono text-primary text-lg font-semibold ml-6;
+  }
 }

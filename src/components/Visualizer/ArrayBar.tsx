@@ -29,10 +29,10 @@ const ArrayBar: React.FC<ArrayBarProps> = ({
   
   // Determine the color of the bar based on its state
   const getBarColor = () => {
-    if (isSwapping) return 'bg-accent';
-    if (isComparing) return 'bg-primary shadow-[0_0_8px_rgba(255,120,180,0.6)]';
-    if (isPivot) return 'bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)]';
-    if (isSorted) return 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]';
+    if (isSwapping) return 'bg-accent shadow-[0_0_15px_rgba(104,220,255,0.7)]';
+    if (isComparing) return 'bg-primary shadow-[0_0_15px_rgba(255,120,180,0.7)]';
+    if (isPivot) return 'bg-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.7)]';
+    if (isSorted) return 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.6)]';
     return 'bg-secondary';
   };
   
@@ -69,7 +69,7 @@ const ArrayBar: React.FC<ArrayBarProps> = ({
         )}
         style={{ height: '100%' }}
         whileHover={{ 
-          scale: 1.15,
+          scale: 1.2,
           zIndex: 10, 
           transition: { duration: 0.1 } 
         }}

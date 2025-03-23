@@ -10,6 +10,7 @@ import Contact from "./pages/Contact";
 import Visualizer from "./pages/Visualizer";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
+import Cookies from "./pages/Cookies";
 import NotFound from "./pages/NotFound";
 
 // Create a client
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/visualize/:algorithmId" element={<Visualizer />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/cookies" element={<Cookies />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
