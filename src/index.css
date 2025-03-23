@@ -7,33 +7,33 @@
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 240 10% 3.9%;
+    --background: 220 20% 14%;
+    --foreground: 210 20% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card: 220 25% 18%;
+    --card-foreground: 210 20% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
+    --popover: 220 25% 18%;
+    --popover-foreground: 210 20% 98%;
 
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 210 100% 66%;
+    --primary-foreground: 220 20% 14%;
 
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
+    --secondary: 220 25% 22%;
+    --secondary-foreground: 210 20% 98%;
 
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
+    --muted: 220 20% 24%;
+    --muted-foreground: 220 10% 70%;
 
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --accent: 30 90% 65%;
+    --accent-foreground: 220 20% 14%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive-foreground: 210 20% 98%;
 
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
+    --border: 215 25% 25%;
+    --input: 215 25% 25%;
+    --ring: 210 100% 66%;
 
     --radius: 0.75rem;
   }
@@ -49,15 +49,15 @@
   }
   
   .glass-card {
-    @apply bg-white/50 backdrop-blur-lg border border-white/20 shadow-sm;
+    @apply bg-card/80 backdrop-blur-lg border border-border/20 shadow-md;
   }
   
   .glass-nav {
-    @apply bg-white/80 backdrop-blur-lg border-b border-white/20;
+    @apply bg-background/95 backdrop-blur-lg border-b border-border/30;
   }
   
   .glass-footer {
-    @apply bg-white/80 backdrop-blur-lg border-t border-white/20;
+    @apply bg-background/95 backdrop-blur-lg border-t border-border/30;
   }
   
   .btn-hover-effect {
@@ -70,10 +70,11 @@
   
   .array-bar {
     @apply transition-all duration-300 ease-in-out;
+    min-height: 10px;
   }
   
   .algo-card {
-    @apply glass-card p-6 rounded-2xl transition-all duration-500 ease-in-out hover:shadow-md hover:bg-white/60;
+    @apply glass-card p-6 rounded-2xl transition-all duration-500 ease-in-out hover:shadow-md hover:bg-card/90;
   }
   
   .visualizer-container {
@@ -82,5 +83,14 @@
   
   .card-hover-effect {
     @apply transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg;
+  }
+  
+  .ad-space {
+    @apply bg-secondary/40 border border-border/30 rounded-lg flex items-center justify-center p-2 text-sm text-muted-foreground;
+    min-height: 90px;
+  }
+  
+  .info-chip {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-primary/20 text-primary-foreground border border-primary/30 gap-1.5;
   }
 }

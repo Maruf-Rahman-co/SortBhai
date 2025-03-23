@@ -10,7 +10,7 @@ import { getAlgorithmById } from '@/lib/algorithms';
 import { generateRandomArray, executeSort, SortingStep } from '@/lib/sorters';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Info } from 'lucide-react';
+import { ArrowLeft, Info, Clock, Database, Layers, Code, Server } from 'lucide-react';
 import { toast } from 'sonner';
 
 const Visualizer = () => {
@@ -146,119 +146,178 @@ const Visualizer = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <main className="flex-grow pt-20">
-        <div className="container mx-auto px-4 py-8">
-          <div className="mb-8">
-            <div className="flex items-center mb-4">
-              <Button asChild variant="ghost" className="mr-2">
+      <main className="flex-grow pt-16">
+        <div className="container mx-auto px-4 py-6">
+          {/* Ad space (top banner) */}
+          <div className="ad-space w-full mb-6">
+            Ad Space - Banner (728×90)
+          </div>
+          
+          <div className="mb-6 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Button asChild variant="ghost" size="sm">
                 <Link to="/">
-                  <ArrowLeft size={16} className="mr-2" />
+                  <ArrowLeft size={16} className="mr-1" />
                   Back
                 </Link>
               </Button>
               
               <h1 className="text-2xl md:text-3xl font-bold">{algorithm.name}</h1>
               
-              <Badge variant="outline" className="ml-4">
+              <Badge className="bg-accent text-accent-foreground">
                 {algorithm.category}
               </Badge>
             </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div className="col-span-1 md:col-span-2">
+              <motion.div
+                className="glass-card p-4 rounded-lg h-full"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <p className="text-muted-foreground">
+                  {algorithm.description}
+                </p>
+              </motion.div>
+            </div>
             
-            <p className="text-muted-foreground mb-4">
-              {algorithm.description}
-            </p>
-            
-            <div className="flex flex-wrap gap-4 mb-6">
-              <div className="glass-card p-3 rounded-lg">
-                <h3 className="text-xs font-medium mb-1">Best Case</h3>
-                <p className="text-sm font-mono">{algorithm.timeComplexityBest}</p>
-              </div>
-              
-              <div className="glass-card p-3 rounded-lg">
-                <h3 className="text-xs font-medium mb-1">Average Case</h3>
-                <p className="text-sm font-mono">{algorithm.timeComplexityAverage}</p>
-              </div>
-              
-              <div className="glass-card p-3 rounded-lg">
-                <h3 className="text-xs font-medium mb-1">Worst Case</h3>
-                <p className="text-sm font-mono">{algorithm.timeComplexityWorst}</p>
-              </div>
-              
-              <div className="glass-card p-3 rounded-lg">
-                <h3 className="text-xs font-medium mb-1">Space Complexity</h3>
-                <p className="text-sm font-mono">{algorithm.spaceComplexity}</p>
-              </div>
+            <div className="col-span-1">
+              <motion.div
+                className="grid grid-cols-2 gap-2"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+              >
+                <div className="glass-card p-3 rounded-lg flex items-center gap-2">
+                  <Clock size={16} className="text-muted-foreground" />
+                  <div>
+                    <h3 className="text-xs font-medium">Best Case</h3>
+                    <p className="text-sm font-mono text-primary">{algorithm.timeComplexityBest}</p>
+                  </div>
+                </div>
+                
+                <div className="glass-card p-3 rounded-lg flex items-center gap-2">
+                  <Clock size={16} className="text-muted-foreground" />
+                  <div>
+                    <h3 className="text-xs font-medium">Average</h3>
+                    <p className="text-sm font-mono text-primary">{algorithm.timeComplexityAverage}</p>
+                  </div>
+                </div>
+                
+                <div className="glass-card p-3 rounded-lg flex items-center gap-2">
+                  <Clock size={16} className="text-muted-foreground" />
+                  <div>
+                    <h3 className="text-xs font-medium">Worst Case</h3>
+                    <p className="text-sm font-mono text-primary">{algorithm.timeComplexityWorst}</p>
+                  </div>
+                </div>
+                
+                <div className="glass-card p-3 rounded-lg flex items-center gap-2">
+                  <Database size={16} className="text-muted-foreground" />
+                  <div>
+                    <h3 className="text-xs font-medium">Space</h3>
+                    <p className="text-sm font-mono text-primary">{algorithm.spaceComplexity}</p>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
           
-          <motion.div 
-            className="visualizer-container mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="w-full h-[400px] flex items-end justify-center mb-8 overflow-hidden pt-8">
-              {isInitialized && currentStepData.array.map((value, index) => (
-                <ArrayBar
-                  key={`${index}-${value}`}
-                  value={value}
-                  index={index}
-                  maxValue={maxValue}
-                  isComparing={currentStepData.compare?.includes(index) || false}
-                  isSwapping={currentStepData.swap?.includes(index) || false}
-                  isSorted={currentStepData.sorted?.includes(index) || false}
-                  isPivot={currentStepData.pivot === index}
-                  onBar={arraySize}
-                />
-              ))}
-              
-              {!isInitialized && (
-                <div className="flex items-center justify-center h-full">
-                  <p className="text-muted-foreground">Initializing...</p>
-                </div>
-              )}
-            </div>
-            
-            <VisualizerControls
-              isPlaying={isPlaying}
-              currentStep={currentStep}
-              totalSteps={sortingSteps.length - 1}
-              speed={speed}
-              arraySize={arraySize}
-              onRandomize={initializeArray}
-              onPlayPause={handlePlayPause}
-              onStepForward={handleStepForward}
-              onStepBackward={handleStepBackward}
-              onGoToStart={handleGoToStart}
-              onGoToEnd={handleGoToEnd}
-              onSpeedChange={handleSpeedChange}
-              onCurrentStepChange={setCurrentStep}
-              onArraySizeChange={handleArraySizeChange}
-            />
-          </motion.div>
-          
-          <motion.div 
-            className="glass-card p-6 rounded-2xl max-w-4xl mx-auto"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <div className="flex items-start space-x-3">
-              <Info size={20} className="text-primary shrink-0 mt-1" />
-              <div>
-                <h3 className="font-medium mb-2">How to use this visualizer</h3>
-                <ul className="list-disc pl-5 space-y-2 text-sm text-muted-foreground">
-                  <li>Use the control buttons to play, pause, or step through the sorting process</li>
-                  <li>The speed slider allows you to adjust how fast the algorithm runs</li>
-                  <li>Click "Randomize" to generate a new random array</li>
-                  <li>Items being compared are highlighted in blue</li>
-                  <li>Items being swapped are highlighted in amber</li>
-                  <li>Sorted items are highlighted in green</li>
-                  {algorithm.id === 'quick' && <li>Pivot elements are highlighted in purple</li>}
-                </ul>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+            <div className="col-span-1">
+              {/* Ad space (side banner) */}
+              <div className="ad-space h-full">
+                Ad Space<br />Sidebar<br />(300×600)
               </div>
             </div>
-          </motion.div>
+            
+            <div className="col-span-1 md:col-span-3">
+              <motion.div 
+                className="visualizer-container mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="w-full h-[400px] flex items-end justify-center mb-6 pt-6 overflow-visible">
+                  {isInitialized && currentStepData.array.map((value, index) => (
+                    <ArrayBar
+                      key={`${index}-${value}`}
+                      value={value}
+                      index={index}
+                      maxValue={maxValue}
+                      isComparing={currentStepData.compare?.includes(index) || false}
+                      isSwapping={currentStepData.swap?.includes(index) || false}
+                      isSorted={currentStepData.sorted?.includes(index) || false}
+                      isPivot={currentStepData.pivot === index}
+                      onBar={arraySize}
+                    />
+                  ))}
+                  
+                  {!isInitialized && (
+                    <div className="flex items-center justify-center h-full">
+                      <p className="text-muted-foreground">Initializing...</p>
+                    </div>
+                  )}
+                </div>
+                
+                <VisualizerControls
+                  isPlaying={isPlaying}
+                  currentStep={currentStep}
+                  totalSteps={sortingSteps.length - 1}
+                  speed={speed}
+                  arraySize={arraySize}
+                  onRandomize={initializeArray}
+                  onPlayPause={handlePlayPause}
+                  onStepForward={handleStepForward}
+                  onStepBackward={handleStepBackward}
+                  onGoToStart={handleGoToStart}
+                  onGoToEnd={handleGoToEnd}
+                  onSpeedChange={handleSpeedChange}
+                  onCurrentStepChange={setCurrentStep}
+                  onArraySizeChange={handleArraySizeChange}
+                />
+              </motion.div>
+              
+              <motion.div 
+                className="glass-card p-4 rounded-lg"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <div className="flex flex-wrap gap-2 mb-2">
+                  <div className="info-chip">
+                    <div className="h-2 w-2 rounded-full bg-primary"></div>
+                    Comparing
+                  </div>
+                  <div className="info-chip">
+                    <div className="h-2 w-2 rounded-full bg-accent"></div>
+                    Swapping
+                  </div>
+                  <div className="info-chip">
+                    <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                    Sorted
+                  </div>
+                  {algorithm.id === 'quick' && (
+                    <div className="info-chip">
+                      <div className="h-2 w-2 rounded-full bg-purple-500"></div>
+                      Pivot
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex items-start gap-2">
+                  <Info size={16} className="text-primary shrink-0 mt-1" />
+                  <p className="text-sm text-muted-foreground">
+                    Use the controls to play, pause, or step through the sorting process. 
+                    You can adjust the speed and array size in the settings menu.
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+          </div>
         </div>
       </main>
       

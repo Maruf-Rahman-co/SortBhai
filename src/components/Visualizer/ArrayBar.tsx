@@ -29,11 +29,11 @@ const ArrayBar: React.FC<ArrayBarProps> = ({
   
   // Determine the color of the bar based on its state
   const getBarColor = () => {
-    if (isSwapping) return 'bg-amber-500';
-    if (isComparing) return 'bg-blue-500';
+    if (isSwapping) return 'bg-accent';
+    if (isComparing) return 'bg-primary';
     if (isPivot) return 'bg-purple-500';
     if (isSorted) return 'bg-green-500';
-    return 'bg-indigo-400';
+    return 'bg-secondary';
   };
   
   return (
@@ -48,6 +48,10 @@ const ArrayBar: React.FC<ArrayBarProps> = ({
       layout
       layoutId={`bar-${index}`}
       transition={{ type: 'spring', stiffness: 250, damping: 25 }}
+      style={{ 
+        minWidth: onBar < 30 ? '12px' : onBar < 60 ? '8px' : onBar < 100 ? '4px' : '2px',
+        margin: '0 1px'
+      }}
     >
       <motion.div 
         className={cn(
@@ -55,19 +59,15 @@ const ArrayBar: React.FC<ArrayBarProps> = ({
           getBarColor(),
           onBar === index ? 'shadow-lg' : ''
         )}
-        style={{ 
-          width: onBar < 50 ? '12px' : onBar < 100 ? '8px' : '4px',
-          marginLeft: '1px',
-          marginRight: '1px'
-        }}
+        style={{ height: '100%' }}
       />
       
-      {onBar < 30 && (
+      {onBar < 25 && (
         <motion.span 
           className="absolute -bottom-6 text-[10px] text-muted-foreground"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.2 }}
         >
           {value}
         </motion.span>
