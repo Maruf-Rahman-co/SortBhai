@@ -7,33 +7,33 @@
 
 @layer base {
   :root {
-    --background: 143 26% 14%;
-    --foreground: 141 43% 88%;
+    --background: 260 25% 11%;
+    --foreground: 260 15% 92%;
 
-    --card: 143 22% 18%;
-    --card-foreground: 141 43% 88%;
+    --card: 260 20% 16%;
+    --card-foreground: 260 15% 92%;
 
-    --popover: 143 22% 18%;
-    --popover-foreground: 141 43% 88%;
+    --popover: 260 20% 16%;
+    --popover-foreground: 260 15% 92%;
 
-    --primary: 142 47% 62%;
-    --primary-foreground: 143 26% 14%;
+    --primary: 330 85% 75%;
+    --primary-foreground: 260 25% 11%;
 
-    --secondary: 143 15% 30%;
-    --secondary-foreground: 141 43% 88%;
+    --secondary: 260 15% 25%;
+    --secondary-foreground: 260 15% 92%;
 
-    --muted: 143 15% 24%;
-    --muted-foreground: 143 15% 65%;
+    --muted: 260 15% 22%;
+    --muted-foreground: 260 15% 65%;
 
-    --accent: 349 84% 77%;
-    --accent-foreground: 143 26% 14%;
+    --accent: 191 85% 65%;
+    --accent-foreground: 260 25% 11%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 141 43% 88%;
+    --destructive-foreground: 260 15% 92%;
 
-    --border: 143 15% 25%;
-    --input: 143 15% 25%;
-    --ring: 142 47% 62%;
+    --border: 260 15% 22%;
+    --input: 260 15% 22%;
+    --ring: 330 85% 75%;
 
     --radius: 0.75rem;
   }
@@ -49,7 +49,7 @@
   }
   
   .glass-card {
-    @apply bg-card/80 backdrop-blur-lg border border-border/20 shadow-md;
+    @apply bg-card/80 backdrop-blur-lg border border-border/30 shadow-md;
   }
   
   .glass-nav {
@@ -74,7 +74,7 @@
   }
   
   .algo-card {
-    @apply glass-card p-6 rounded-2xl transition-all duration-500 ease-in-out hover:shadow-md hover:bg-card/90;
+    @apply glass-card p-6 rounded-2xl transition-all duration-500 ease-in-out hover:shadow-lg hover:translate-y-[-4px] hover:bg-card/95;
   }
   
   .visualizer-container {
@@ -86,11 +86,27 @@
   }
   
   .ad-space {
-    @apply bg-secondary/40 border border-border/30 rounded-lg flex items-center justify-center p-2 text-sm text-muted-foreground;
+    @apply bg-secondary/40 border border-primary/20 rounded-lg flex items-center justify-center p-2 text-sm text-muted-foreground;
     min-height: 90px;
   }
   
   .info-chip {
-    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-primary/20 text-primary-foreground border border-primary/30 gap-1.5;
+    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-primary/20 text-primary border border-primary/30 gap-1.5;
+  }
+
+  .algo-metrics {
+    @apply flex flex-wrap gap-2 p-3 bg-secondary/40 rounded-lg border border-border/30 mt-4;
+  }
+  
+  .metric-item {
+    @apply flex flex-col items-center text-xs bg-background/50 p-2 rounded-md border border-border/20 flex-1 min-w-[80px];
+  }
+  
+  .metric-label {
+    @apply text-muted-foreground text-[10px] font-medium uppercase tracking-wider mb-1;
+  }
+  
+  .metric-value {
+    @apply font-mono font-medium text-foreground;
   }
 }

@@ -5,6 +5,7 @@ import { SortingAlgorithm } from '@/lib/algorithms';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { Clock, Cpu, Scale, Database, ExternalLink } from 'lucide-react';
 
 interface AlgorithmCardProps {
   algorithm: SortingAlgorithm;
@@ -14,7 +15,7 @@ interface AlgorithmCardProps {
 const AlgorithmCard: React.FC<AlgorithmCardProps> = ({ algorithm, delay }) => {
   return (
     <motion.div
-      className="algo-card card-hover-effect"
+      className="algo-card"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: delay * 0.1 }}
@@ -28,37 +29,51 @@ const AlgorithmCard: React.FC<AlgorithmCardProps> = ({ algorithm, delay }) => {
           <p className="text-sm text-muted-foreground mt-2">{algorithm.description}</p>
         </div>
         
-        <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-auto">
-          <div className="text-xs">
-            <span className="font-medium text-muted-foreground">Best:</span>{' '}
-            <span className="font-mono">{algorithm.timeComplexityBest}</span>
+        <div className="algo-metrics mt-auto">
+          <div className="metric-item">
+            <span className="metric-label flex items-center gap-1">
+              <Clock className="w-3 h-3" /> Best
+            </span>
+            <span className="metric-value">{algorithm.timeComplexityBest}</span>
           </div>
-          <div className="text-xs">
-            <span className="font-medium text-muted-foreground">Avg:</span>{' '}
-            <span className="font-mono">{algorithm.timeComplexityAverage}</span>
+          <div className="metric-item">
+            <span className="metric-label flex items-center gap-1">
+              <Clock className="w-3 h-3" /> Avg
+            </span>
+            <span className="metric-value">{algorithm.timeComplexityAverage}</span>
           </div>
-          <div className="text-xs">
-            <span className="font-medium text-muted-foreground">Worst:</span>{' '}
-            <span className="font-mono">{algorithm.timeComplexityWorst}</span>
+          <div className="metric-item">
+            <span className="metric-label flex items-center gap-1">
+              <Clock className="w-3 h-3" /> Worst
+            </span>
+            <span className="metric-value">{algorithm.timeComplexityWorst}</span>
           </div>
-          <div className="text-xs">
-            <span className="font-medium text-muted-foreground">Space:</span>{' '}
-            <span className="font-mono">{algorithm.spaceComplexity}</span>
+          <div className="metric-item">
+            <span className="metric-label flex items-center gap-1">
+              <Database className="w-3 h-3" /> Space
+            </span>
+            <span className="metric-value">{algorithm.spaceComplexity}</span>
           </div>
         </div>
         
-        <div className="flex items-center justify-between mt-6">
+        <div className="flex items-center justify-between mt-4">
           <div className="text-xs flex flex-wrap gap-2">
             {algorithm.stable && (
-              <Badge variant="secondary" className="text-xs">Stable</Badge>
+              <Badge variant="secondary" className="text-xs flex items-center gap-1">
+                <Scale className="w-3 h-3" /> Stable
+              </Badge>
             )}
             {algorithm.inPlace && (
-              <Badge variant="secondary" className="text-xs">In-Place</Badge>
+              <Badge variant="secondary" className="text-xs flex items-center gap-1">
+                <Cpu className="w-3 h-3" /> In-Place
+              </Badge>
             )}
           </div>
           
           <Button asChild>
-            <Link to={`/visualize/${algorithm.id}`}>Visualize</Link>
+            <Link to={`/visualize/${algorithm.id}`} className="flex items-center gap-1">
+              Visualize <ExternalLink className="w-3 h-3" />
+            </Link>
           </Button>
         </div>
       </div>
