@@ -12,21 +12,21 @@ const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
   return (
     <div className="relative h-[80vh] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 opacity-50" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-accent/10 opacity-30" />
         
         {/* Abstract decorative elements */}
         <motion.div 
-          className="absolute top-20 left-10 w-64 h-64 bg-blue-200 rounded-full opacity-20"
+          className="absolute top-20 left-10 w-64 h-64 bg-primary/20 rounded-full opacity-20"
           animate={{ scale: [1, 1.2, 1], x: [0, 10, 0], y: [0, 15, 0] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div 
-          className="absolute bottom-10 right-10 w-80 h-80 bg-indigo-200 rounded-full opacity-20"
+          className="absolute bottom-10 right-10 w-80 h-80 bg-accent/20 rounded-full opacity-20"
           animate={{ scale: [1.2, 1, 1.2], x: [0, -20, 0], y: [0, -10, 0] }}
           transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div 
-          className="absolute top-40 right-1/4 w-40 h-40 bg-purple-200 rounded-full opacity-20"
+          className="absolute top-40 right-1/4 w-40 h-40 bg-secondary/30 rounded-full opacity-20"
           animate={{ scale: [1, 0.9, 1], x: [0, -5, 0], y: [0, 20, 0] }}
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
         />

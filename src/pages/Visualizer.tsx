@@ -10,8 +10,9 @@ import { getAlgorithmById } from '@/lib/algorithms';
 import { generateRandomArray, executeSort, SortingStep } from '@/lib/sorters';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Info, Clock, Database, Layers, Code, Server } from 'lucide-react';
+import { ArrowLeft, Info, Clock, Database, Layers, Code, Server, Shuffle, Settings, Play, Pause, SkipBack, SkipForward, Rewind, FastForward } from 'lucide-react';
 import { toast } from 'sonner';
+import { Slider } from '@/components/ui/slider';
 
 const Visualizer = () => {
   const { algorithmId } = useParams<{ algorithmId: string }>();
@@ -235,6 +236,134 @@ const Visualizer = () => {
             </div>
             
             <div className="col-span-1 md:col-span-3">
+              {/* Inline Controls */}
+              <motion.div 
+                className="glass-card p-4 rounded-lg mb-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="flex flex-wrap gap-4 items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={handleGoToStart}
+                      className="h-8 w-8"
+                    >
+                      <Rewind size={14} />
+                    </Button>
+                    
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={handleStepBackward}
+                      className="h-8 w-8"
+                    >
+                      <SkipBack size={14} />
+                    </Button>
+                    
+                    <Button 
+                      variant={isPlaying ? "secondary" : "default"} 
+                      size="icon" 
+                      onClick={handlePlayPause}
+                      className="h-9 w-9"
+                    >
+                      {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+                    </Button>
+                    
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={handleStepForward}
+                      className="h-8 w-8"
+                    >
+                      <SkipForward size={14} />
+                    </Button>
+                    
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={handleGoToEnd}
+                      className="h-8 w-8"
+                    >
+                      <FastForward size={14} />
+                    </Button>
+                    
+                    <span className="text-xs text-muted-foreground ml-2">
+                      {currentStep + 1} / {sortingSteps.length > 0 ? sortingSteps.length : 1}
+                    </span>
+                  </div>
+                  
+                  <div className="flex flex-wrap items-center gap-4">
+                    <div className="flex items-center gap-2 min-w-[150px]">
+                      <span className="text-xs whitespace-nowrap">Speed:</span>
+                      <Slider
+                        value={[speed]}
+                        min={1}
+                        max={10}
+                        step={1}
+                        onValueChange={(value) => handleSpeedChange(value[0])}
+                        className="w-24"
+                      />
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs whitespace-nowrap">Size:</span>
+                      <Slider
+                        value={[arraySize]}
+                        min={5}
+                        max={100}
+                        step={5}
+                        onValueChange={(value) => handleArraySizeChange(value[0])}
+                        className="w-24"
+                      />
+                      <span className="text-xs text-muted-foreground ml-1">{arraySize}</span>
+                    </div>
+                    
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={initializeArray}
+                      className="flex items-center gap-2"
+                    >
+                      <Shuffle size={14} />
+                      <span className="hidden sm:inline">Randomize</span>
+                    </Button>
+                  </div>
+                </div>
+              </motion.div>
+              
+              {/* Legend */}
+              <motion.div 
+                className="glass-card p-3 rounded-lg mb-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+              >
+                <div className="flex flex-wrap gap-2">
+                  <div className="info-chip">
+                    <div className="h-2 w-2 rounded-full bg-primary"></div>
+                    Comparing
+                  </div>
+                  <div className="info-chip">
+                    <div className="h-2 w-2 rounded-full bg-accent"></div>
+                    Swapping
+                  </div>
+                  <div className="info-chip">
+                    <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                    Sorted
+                  </div>
+                  {algorithm.id === 'quick' && (
+                    <div className="info-chip">
+                      <div className="h-2 w-2 rounded-full bg-purple-500"></div>
+                      Pivot
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+              
+              {/* Visualization */}
               <motion.div 
                 className="visualizer-container mb-4"
                 initial={{ opacity: 0, y: 20 }}
@@ -261,59 +390,6 @@ const Visualizer = () => {
                       <p className="text-muted-foreground">Initializing...</p>
                     </div>
                   )}
-                </div>
-                
-                <VisualizerControls
-                  isPlaying={isPlaying}
-                  currentStep={currentStep}
-                  totalSteps={sortingSteps.length - 1}
-                  speed={speed}
-                  arraySize={arraySize}
-                  onRandomize={initializeArray}
-                  onPlayPause={handlePlayPause}
-                  onStepForward={handleStepForward}
-                  onStepBackward={handleStepBackward}
-                  onGoToStart={handleGoToStart}
-                  onGoToEnd={handleGoToEnd}
-                  onSpeedChange={handleSpeedChange}
-                  onCurrentStepChange={setCurrentStep}
-                  onArraySizeChange={handleArraySizeChange}
-                />
-              </motion.div>
-              
-              <motion.div 
-                className="glass-card p-4 rounded-lg"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-              >
-                <div className="flex flex-wrap gap-2 mb-2">
-                  <div className="info-chip">
-                    <div className="h-2 w-2 rounded-full bg-primary"></div>
-                    Comparing
-                  </div>
-                  <div className="info-chip">
-                    <div className="h-2 w-2 rounded-full bg-accent"></div>
-                    Swapping
-                  </div>
-                  <div className="info-chip">
-                    <div className="h-2 w-2 rounded-full bg-green-500"></div>
-                    Sorted
-                  </div>
-                  {algorithm.id === 'quick' && (
-                    <div className="info-chip">
-                      <div className="h-2 w-2 rounded-full bg-purple-500"></div>
-                      Pivot
-                    </div>
-                  )}
-                </div>
-                
-                <div className="flex items-start gap-2">
-                  <Info size={16} className="text-primary shrink-0 mt-1" />
-                  <p className="text-sm text-muted-foreground">
-                    Use the controls to play, pause, or step through the sorting process. 
-                    You can adjust the speed and array size in the settings menu.
-                  </p>
                 </div>
               </motion.div>
             </div>
