@@ -9,14 +9,11 @@ interface SEOProps {
   type?: string;
 }
 
-const BASE_URL = import.meta.env.BASE_URL || '';
-const SITE_URL = 'https://sortbhai.com';
-
 const SEO = ({ 
   title = 'SortBhai - Algorithm Visualization Tool',
   description = 'Visualize and understand various sorting algorithms with interactive animations and step-by-step explanations.',
-  image = `${SITE_URL}/og-image.png`,
-  url = SITE_URL,
+  image = '/og-image.png',
+  url = 'https://sortbhai.com',
   type = 'website'
 }: SEOProps) => {
   return (
@@ -47,8 +44,8 @@ const SEO = ({
       <link rel="canonical" href={url} />
       
       {/* Favicon */}
-      <link rel="icon" href={`${BASE_URL}favicon.ico`} />
-      <link rel="apple-touch-icon" href={`${BASE_URL}apple-touch-icon.png`} />
+      <link rel="icon" href="/favicon.ico" />
+      <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       
       {/* Structured Data */}
       <script type="application/ld+json">
