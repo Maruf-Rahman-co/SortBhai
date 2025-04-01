@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 import { Suspense, lazy } from 'react';
 import SEO from './components/SEO';
@@ -52,7 +52,7 @@ const App = () => (
           <SEO />
           <Toaster />
           <Sonner position="top-right" theme="dark" />
-          <BrowserRouter>
+          <HashRouter>
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
                 <Route path="/" element={<IndexPage />} />
@@ -65,7 +65,7 @@ const App = () => (
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>
-          </BrowserRouter>
+          </HashRouter>
         </div>
       </TooltipProvider>
     </QueryClientProvider>

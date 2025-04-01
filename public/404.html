@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SortBhai - Redirecting...</title>
+    <script>
+        // Get the current path
+        const path = window.location.pathname;
+        
+        // Remove the repository name from the path if it exists
+        const repoName = '/sort-ninja-visuals/';
+        const cleanPath = path.replace(repoName, '');
+        
+        // Redirect to the hash router version
+        window.location.href = `${window.location.origin}${repoName}#${cleanPath}`;
+    </script>
+</head>
+<body>
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <h1>Redirecting...</h1>
+    </div>
+</body>
+</html> 
