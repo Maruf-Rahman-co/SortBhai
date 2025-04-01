@@ -1,13 +1,17 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { Play, Pause, SkipBack, SkipForward, Rewind, FastForward, Shuffle, Settings } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetFooter, SheetClose } from "@/components/ui/sheet";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Play, Pause, SkipBack, SkipForward, Rewind, FastForward, Shuffle } from 'lucide-react';
+import { sortingAlgorithms } from '@/lib/algorithms';
+import { useNavigate } from 'react-router-dom';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface VisualizerControlsProps {
   isPlaying: boolean;
@@ -15,6 +19,7 @@ interface VisualizerControlsProps {
   totalSteps: number;
   speed: number;
   arraySize: number;
+  currentAlgorithmId: string;
   onRandomize: () => void;
   onPlayPause: () => void;
   onStepForward: () => void;
@@ -32,6 +37,7 @@ const VisualizerControls: React.FC<VisualizerControlsProps> = ({
   totalSteps,
   speed,
   arraySize,
+  currentAlgorithmId,
   onRandomize,
   onPlayPause,
   onStepForward,
@@ -42,9 +48,7 @@ const VisualizerControls: React.FC<VisualizerControlsProps> = ({
   onCurrentStepChange,
   onArraySizeChange
 }) => {
-  const handleProgressChange = (value: number[]) => {
-    onCurrentStepChange(value[0]);
-  };
+  const navigate = useNavigate();
   
   const handleSliderClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const container = e.currentTarget;
@@ -53,154 +57,118 @@ const VisualizerControls: React.FC<VisualizerControlsProps> = ({
     const step = Math.round(position * totalSteps);
     onCurrentStepChange(step);
   };
+
+  const handleAlgorithmChange = (algorithmId: string) => {
+    navigate(`/visualize/${algorithmId}`);
+  };
   
   return (
     <motion.div 
-      className="w-full p-4 glass-card rounded-xl"
-      initial={{ opacity: 0, y: 20 }}
+      className="glass-card p-4 rounded-lg mb-4"
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.3 }}
     >
-      <div className="grid grid-cols-1 gap-4">
-        <div 
-          className="relative w-full h-2 bg-muted rounded-full cursor-pointer"
-          onClick={handleSliderClick}
-        >
-          <div 
-            className="absolute top-0 left-0 h-full bg-primary rounded-full"
-            style={{ width: `${(currentStep / totalSteps) * 100}%` }}
-          />
-        </div>
-        
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={onGoToStart}
-              className="h-8 w-8"
-            >
-              <Rewind size={14} />
-            </Button>
-            
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={onStepBackward}
-              className="h-8 w-8"
-            >
-              <SkipBack size={14} />
-            </Button>
-            
-            <Button 
-              variant={isPlaying ? "secondary" : "default"} 
-              size="icon" 
-              onClick={onPlayPause}
-              className="h-9 w-9"
-            >
-              {isPlaying ? <Pause size={16} /> : <Play size={16} />}
-            </Button>
-            
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={onStepForward}
-              className="h-8 w-8"
-            >
-              <SkipForward size={14} />
-            </Button>
-            
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={onGoToEnd}
-              className="h-8 w-8"
-            >
-              <FastForward size={14} />
-            </Button>
-          </div>
+      <div className="flex flex-wrap gap-4 items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={onGoToStart}
+            className="h-8 w-8"
+          >
+            <Rewind size={14} />
+          </Button>
           
-          <span className="text-xs text-muted-foreground">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={onStepBackward}
+            className="h-8 w-8"
+          >
+            <SkipBack size={14} />
+          </Button>
+          
+          <Button 
+            variant={isPlaying ? "secondary" : "default"} 
+            size="icon" 
+            onClick={onPlayPause}
+            className="h-9 w-9"
+          >
+            {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+          </Button>
+          
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={onStepForward}
+            className="h-8 w-8"
+          >
+            <SkipForward size={14} />
+          </Button>
+          
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={onGoToEnd}
+            className="h-8 w-8"
+          >
+            <FastForward size={14} />
+          </Button>
+          
+          <span className="text-xs text-muted-foreground ml-2">
             {currentStep + 1} / {totalSteps + 1}
           </span>
+        </div>
+        
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2 min-w-[150px]">
+            <span className="text-xs whitespace-nowrap">Speed:</span>
+            <Slider
+              value={[speed]}
+              min={1}
+              max={10}
+              step={1}
+              onValueChange={(value) => onSpeedChange(value[0])}
+              className="w-24"
+            />
+          </div>
           
           <div className="flex items-center gap-2">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={onRandomize}
-                    className="h-8 flex gap-1"
-                  >
-                    <Shuffle size={14} />
-                    <span className="hidden sm:inline">Randomize</span>
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Generate new random array</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="h-8 flex gap-1"
-                >
-                  <Settings size={14} />
-                  <span className="hidden sm:inline">Settings</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent>
-                <SheetHeader>
-                  <SheetTitle>Algorithm Settings</SheetTitle>
-                </SheetHeader>
-                <div className="py-4 space-y-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="speed">Animation Speed</Label>
-                    <div className="flex items-center gap-4 pt-2">
-                      <span className="text-xs text-muted-foreground">Slow</span>
-                      <Slider
-                        id="speed"
-                        value={[speed]}
-                        min={1}
-                        max={10}
-                        step={1}
-                        onValueChange={(value) => onSpeedChange(value[0])}
-                        className="flex-1"
-                      />
-                      <span className="text-xs text-muted-foreground">Fast</span>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="array-size">Array Size</Label>
-                    <div className="flex items-center gap-2">
-                      <Input
-                        id="array-size"
-                        type="number"
-                        value={arraySize}
-                        onChange={(e) => onArraySizeChange(parseInt(e.target.value) || 10)}
-                        min={5}
-                        max={200}
-                        className="w-24"
-                      />
-                      <span className="text-sm text-muted-foreground">elements</span>
-                    </div>
-                  </div>
-                </div>
-                <SheetFooter>
-                  <SheetClose asChild>
-                    <Button>Apply</Button>
-                  </SheetClose>
-                </SheetFooter>
-              </SheetContent>
-            </Sheet>
+            <span className="text-xs whitespace-nowrap">Size:</span>
+            <Slider
+              value={[arraySize]}
+              min={5}
+              max={100}
+              step={5}
+              onValueChange={(value) => onArraySizeChange(value[0])}
+              className="w-24"
+            />
+            <span className="text-xs text-muted-foreground ml-1">{arraySize}</span>
           </div>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onRandomize}
+            className="flex items-center gap-2"
+          >
+            <Shuffle size={14} />
+            <span className="hidden sm:inline">Randomize</span>
+          </Button>
+
+          <Select value={currentAlgorithmId} onValueChange={handleAlgorithmChange}>
+            <SelectTrigger className="h-8 w-[180px]">
+              <SelectValue placeholder="Select algorithm" />
+            </SelectTrigger>
+            <SelectContent>
+              {sortingAlgorithms.map((algo) => (
+                <SelectItem key={algo.id} value={algo.id}>
+                  {algo.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </motion.div>

@@ -1,16 +1,15 @@
-
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, Link, useLocation } from 'react-router-dom';
+import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ArrayBar from '@/components/Visualizer/ArrayBar';
 import VisualizerControls from '@/components/Visualizer/VisualizerControls';
-import { getAlgorithmById } from '@/lib/algorithms';
+import { getAlgorithmById, sortingAlgorithms } from '@/lib/algorithms';
 import { generateRandomArray, executeSort, SortingStep } from '@/lib/sorters';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Info, Clock, Database, Layers, Play, Pause, SkipBack, SkipForward, Rewind, FastForward, Cpu, Scale, Shuffle } from 'lucide-react';
+import { ArrowLeft, Info, Clock, Database, Layers, Play, Pause, SkipBack, SkipForward, Rewind, FastForward, Cpu, Scale, Shuffle, GitBranch } from 'lucide-react';
 import { toast } from 'sonner';
 import { Slider } from '@/components/ui/slider';
 
@@ -18,6 +17,7 @@ const Visualizer = () => {
   const { algorithmId } = useParams<{ algorithmId: string }>();
   const algorithm = getAlgorithmById(algorithmId || '');
   const location = useLocation();
+  const navigate = useNavigate();
   
   const [arraySize, setArraySize] = useState(30);
   const [array, setArray] = useState<number[]>([]);
@@ -122,6 +122,12 @@ const Visualizer = () => {
   const handleArraySizeChange = (size: number) => {
     if (size >= 5 && size <= 200) {
       setArraySize(size);
+    }
+  };
+  
+  const handleCurrentStepChange = (step: number) => {
+    if (step >= 0 && step < sortingSteps.length) {
+      setCurrentStep(step);
     }
   };
   
@@ -254,103 +260,24 @@ const Visualizer = () => {
             </div>
             
             <div className="col-span-1 md:col-span-3">
-              {/* Inline Controls */}
-              <motion.div 
-                className="glass-card p-4 rounded-lg mb-4"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="flex flex-wrap gap-4 items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      onClick={handleGoToStart}
-                      className="h-8 w-8"
-                    >
-                      <Rewind size={14} />
-                    </Button>
-                    
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      onClick={handleStepBackward}
-                      className="h-8 w-8"
-                    >
-                      <SkipBack size={14} />
-                    </Button>
-                    
-                    <Button 
-                      variant={isPlaying ? "secondary" : "default"} 
-                      size="icon" 
-                      onClick={handlePlayPause}
-                      className="h-9 w-9"
-                    >
-                      {isPlaying ? <Pause size={16} /> : <Play size={16} />}
-                    </Button>
-                    
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      onClick={handleStepForward}
-                      className="h-8 w-8"
-                    >
-                      <SkipForward size={14} />
-                    </Button>
-                    
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      onClick={handleGoToEnd}
-                      className="h-8 w-8"
-                    >
-                      <FastForward size={14} />
-                    </Button>
-                    
-                    <span className="text-xs text-muted-foreground ml-2">
-                      {currentStep + 1} / {sortingSteps.length > 0 ? sortingSteps.length : 1}
-                    </span>
-                  </div>
-                  
-                  <div className="flex flex-wrap items-center gap-4">
-                    <div className="flex items-center gap-2 min-w-[150px]">
-                      <span className="text-xs whitespace-nowrap">Speed:</span>
-                      <Slider
-                        value={[speed]}
-                        min={1}
-                        max={10}
-                        step={1}
-                        onValueChange={(value) => handleSpeedChange(value[0])}
-                        className="w-24"
-                      />
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs whitespace-nowrap">Size:</span>
-                      <Slider
-                        value={[arraySize]}
-                        min={5}
-                        max={100}
-                        step={5}
-                        onValueChange={(value) => handleArraySizeChange(value[0])}
-                        className="w-24"
-                      />
-                      <span className="text-xs text-muted-foreground ml-1">{arraySize}</span>
-                    </div>
-                    
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={initializeArray}
-                      className="flex items-center gap-2"
-                    >
-                      <Shuffle size={14} />
-                      <span className="hidden sm:inline">Randomize</span>
-                    </Button>
-                  </div>
-                </div>
-              </motion.div>
+              {/* Visualization Controls */}
+              <VisualizerControls
+                isPlaying={isPlaying}
+                currentStep={currentStep}
+                totalSteps={sortingSteps.length - 1}
+                speed={speed}
+                arraySize={arraySize}
+                currentAlgorithmId={algorithmId || ''}
+                onRandomize={initializeArray}
+                onPlayPause={handlePlayPause}
+                onStepForward={handleStepForward}
+                onStepBackward={handleStepBackward}
+                onGoToStart={handleGoToStart}
+                onGoToEnd={handleGoToEnd}
+                onSpeedChange={handleSpeedChange}
+                onCurrentStepChange={handleCurrentStepChange}
+                onArraySizeChange={handleArraySizeChange}
+              />
               
               {/* Legend */}
               <motion.div 
