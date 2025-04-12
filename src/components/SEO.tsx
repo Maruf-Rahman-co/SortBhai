@@ -8,19 +8,28 @@ interface SEOProps {
   description?: string;
   image?: string;
   type?: string;
+  pathname?: string; // Added pathname prop for cases when outside Router
 }
 
 const SEO = ({ 
   title = 'SortBhai - Algorithm Visualization Tool',
   description = 'Visualize and understand various sorting algorithms with interactive animations and step-by-step explanations.',
   image,
-  type = 'website'
+  type = 'website',
+  pathname
 }: SEOProps) => {
-  const location = useLocation();
+  // Try to use location if available, otherwise use pathname prop or empty string
+  let currentPath = '';
+  try {
+    const location = useLocation();
+    currentPath = location.pathname;
+  } catch (e) {
+    currentPath = pathname || '';
+  }
   
   // Get the current URL dynamically
   const currentUrl = typeof window !== 'undefined' 
-    ? `${window.location.origin}${location.pathname}`
+    ? `${window.location.origin}${currentPath}`
     : '';
     
   // Build image URL dynamically

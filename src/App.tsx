@@ -51,10 +51,10 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <div className="dark">
-          <SEO />
           <Toaster />
           <Sonner position="top-right" theme="dark" />
           <BrowserRouter>
+            <SEO /> {/* Moved inside BrowserRouter */}
             <ScrollToTop />
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
