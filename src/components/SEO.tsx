@@ -11,12 +11,9 @@ interface SEOProps {
   pathname?: string; // Added pathname prop for cases when outside Router
 }
 
-<<<<<<< Updated upstream
-=======
 const BASE_URL = import.meta.env.BASE_URL || '';
 const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://sortbhai.com';
 
->>>>>>> Stashed changes
 const SEO = ({ 
   title = 'SortBhai - Algorithm Visualization Tool',
   description = 'Visualize and understand various sorting algorithms with interactive animations and step-by-step explanations.',
