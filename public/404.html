@@ -6,24 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SortBhai - Page Not Found</title>
     <script>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
         // Get the current path
         const path = window.location.pathname;
         
         // Get the base URL from the current location
         const baseUrl = window.location.origin;
         
-        // Redirect to the hash router version
-        window.location.href = `${baseUrl}/#${path}`;
-=======
-        // Redirect to the home page
-        window.location.href = '/';
->>>>>>> Stashed changes
-=======
-        // Redirect to the home page
-        window.location.href = '/';
->>>>>>> Stashed changes
+        // Redirect to the main app with the path
+        window.location.href = `${baseUrl}/${path.startsWith('/') ? path.slice(1) : path}`;
     </script>
 </head>
 <body>
