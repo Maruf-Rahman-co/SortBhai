@@ -2,6 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ArrayBarProps {
   value: number;
@@ -24,6 +25,7 @@ const ArrayBar: React.FC<ArrayBarProps> = ({
   isPivot,
   onBar
 }) => {
+  const isMobile = useIsMobile();
   // Calculate the height percentage based on the maximum value
   const heightPercentage = (value / maxValue) * 100;
   
@@ -36,13 +38,28 @@ const ArrayBar: React.FC<ArrayBarProps> = ({
     return 'bg-secondary';
   };
   
-  // Calculate width based on number of bars
+  // Calculate width based on number of bars and screen size
   const getBarWidth = () => {
-    if (onBar < 20) return 'min-w-[20px] mx-[3px]';
-    if (onBar < 40) return 'min-w-[14px] mx-[2px]';
-    if (onBar < 60) return 'min-w-[10px] mx-[1.5px]';
-    if (onBar < 100) return 'min-w-[6px] mx-[1px]';
-    return 'min-w-[3px] mx-[0.5px]';
+    if (isMobile) {
+      if (onBar < 10) return 'min-w-[18px] mx-[2px]';
+      if (onBar < 20) return 'min-w-[12px] mx-[1.5px]';
+      if (onBar < 30) return 'min-w-[8px] mx-[1px]';
+      return 'min-w-[4px] mx-[0.5px]';
+    } else {
+      if (onBar < 20) return 'min-w-[20px] mx-[3px]';
+      if (onBar < 40) return 'min-w-[14px] mx-[2px]';
+      if (onBar < 60) return 'min-w-[10px] mx-[1.5px]';
+      if (onBar < 100) return 'min-w-[6px] mx-[1px]';
+      return 'min-w-[3px] mx-[0.5px]';
+    }
+  };
+
+  // Determine whether to show value labels based on array size and screen
+  const shouldShowValue = () => {
+    if (isMobile) {
+      return onBar < 15;
+    }
+    return onBar < 25;
   };
 
   return (
@@ -75,9 +92,9 @@ const ArrayBar: React.FC<ArrayBarProps> = ({
         }}
       />
       
-      {onBar < 25 && (
+      {shouldShowValue() && (
         <motion.span 
-          className="absolute -bottom-6 text-[10px] text-foreground bg-background/80 px-1 rounded"
+          className="absolute -bottom-6 text-[8px] md:text-[10px] text-foreground bg-background/80 px-1 rounded"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}

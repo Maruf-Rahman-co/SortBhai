@@ -43,7 +43,7 @@
   }
   
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans overflow-x-hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -78,7 +78,7 @@
   }
   
   .visualizer-container {
-    @apply flex flex-col items-center justify-center p-6 rounded-2xl glass-card min-h-[400px];
+    @apply flex flex-col items-center justify-center p-4 md:p-6 rounded-2xl glass-card min-h-[300px] md:min-h-[400px];
   }
   
   .card-hover-effect {
@@ -91,7 +91,7 @@
   }
   
   .info-chip {
-    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-primary/20 text-primary border border-primary/30 gap-1.5;
+    @apply inline-flex items-center rounded-full px-2 py-1 text-xs font-medium bg-primary/20 text-primary border border-primary/30 gap-1.5;
   }
 
   .algo-metrics {
@@ -112,16 +112,31 @@
   
   /* New styles for complexity cards */
   .complexity-card {
-    @apply bg-background/50 rounded-lg border border-border/40 p-3 transition-all duration-300 hover:shadow-lg hover:border-accent/30;
+    @apply bg-background/50 rounded-lg border border-border/40 p-2 md:p-3 transition-all duration-300 hover:shadow-lg hover:border-accent/30;
   }
   
   .complexity-header {
-    @apply flex items-center gap-2 mb-2;
-    font-size: 0.85rem;
+    @apply flex items-center gap-2 mb-1 md:mb-2;
+    font-size: 0.8rem;
     font-weight: 500;
   }
   
   .complexity-value {
-    @apply font-mono text-primary text-lg font-semibold ml-6;
+    @apply font-mono text-primary text-sm md:text-lg font-semibold ml-4 md:ml-6;
+  }
+
+  /* Responsive adjustments for mobile */
+  @media screen and (max-width: 640px) {
+    .visualizer-container {
+      padding: 1rem;
+    }
+    
+    .complexity-value {
+      font-size: 0.9rem;
+    }
+    
+    .info-chip {
+      padding: 0.125rem 0.5rem;
+    }
   }
 }

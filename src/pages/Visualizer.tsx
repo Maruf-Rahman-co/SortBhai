@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -12,14 +13,16 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Info, Clock, Database, Layers, Play, Pause, SkipBack, SkipForward, Rewind, FastForward, Cpu, Scale, Shuffle, GitBranch } from 'lucide-react';
 import { toast } from 'sonner';
 import { Slider } from '@/components/ui/slider';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Visualizer = () => {
   const { algorithmId } = useParams<{ algorithmId: string }>();
   const algorithm = getAlgorithmById(algorithmId || '');
   const location = useLocation();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   
-  const [arraySize, setArraySize] = useState(30);
+  const [arraySize, setArraySize] = useState(isMobile ? 15 : 30);
   const [array, setArray] = useState<number[]>([]);
   const [sortingSteps, setSortingSteps] = useState<SortingStep[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
@@ -65,6 +68,13 @@ const Visualizer = () => {
       }
     };
   }, [isPlaying, speed, sortingSteps.length]);
+  
+  // Adjust array size for mobile devices
+  useEffect(() => {
+    if (isMobile && arraySize > 15) {
+      setArraySize(15);
+    }
+  }, [isMobile]);
   
   const initializeArray = () => {
     // Reset everything
@@ -159,15 +169,15 @@ const Visualizer = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <main className="flex-grow pt-16">
+      <main className="flex-grow pt-16 overflow-x-hidden">
         <div className="container mx-auto px-4 py-6">
           {/* Ad space (top banner) */}
-          <div className="ad-space w-full mb-6">
+          <div className="ad-space w-full mb-6 hidden md:block">
             Ad Space - Banner (728×90)
           </div>
           
-          <div className="mb-6 flex items-center justify-between">
-            <div className="flex items-center gap-3">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Button asChild variant="ghost" size="sm">
                 <Link to="/">
                   <ArrowLeft size={16} className="mr-1" />
@@ -175,7 +185,7 @@ const Visualizer = () => {
                 </Link>
               </Button>
               
-              <h1 className="text-2xl md:text-3xl font-bold">{algorithm.name}</h1>
+              <h1 className="text-xl md:text-3xl font-bold">{algorithm.name}</h1>
               
               <Badge className="bg-accent text-accent-foreground">
                 {algorithm.category}
@@ -184,7 +194,7 @@ const Visualizer = () => {
           </div>
           
           {/* Algorithm Information Section - Redesigned */}
-          <div className="glass-card p-6 rounded-lg mb-6">
+          <div className="glass-card p-4 md:p-6 rounded-lg mb-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="col-span-1 md:col-span-2">
                 <div className="flex flex-col h-full">
@@ -214,7 +224,7 @@ const Visualizer = () => {
               </div>
               
               <div className="col-span-1 md:col-span-2">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2 md:gap-3">
                   <div className="complexity-card">
                     <div className="complexity-header">
                       <Clock size={14} className="text-accent" />
@@ -251,15 +261,9 @@ const Visualizer = () => {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+          <div className="grid grid-cols-1 gap-6 mb-6">
+            {/* Visualization area - Full width on all screen sizes */}
             <div className="col-span-1">
-              {/* Ad space (side banner) */}
-              <div className="ad-space h-full">
-                Ad Space<br />Sidebar<br />(300×600)
-              </div>
-            </div>
-            
-            <div className="col-span-1 md:col-span-3">
               {/* Visualization Controls */}
               <VisualizerControls
                 isPlaying={isPlaying}
@@ -310,12 +314,12 @@ const Visualizer = () => {
               
               {/* Visualization */}
               <motion.div 
-                className="visualizer-container mb-4"
+                className="visualizer-container mb-4 overflow-x-hidden"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <div className="w-full h-[400px] flex items-end justify-center mb-6 pt-6 overflow-visible">
+                <div className="w-full h-[300px] md:h-[400px] flex items-end justify-center mb-6 pt-6 overflow-hidden">
                   {isInitialized && currentStepData.array.map((value, index) => (
                     <ArrayBar
                       key={`${index}-${value}`}
@@ -337,6 +341,11 @@ const Visualizer = () => {
                   )}
                 </div>
               </motion.div>
+              
+              {/* Ad space (side banner) - Only show on desktop */}
+              <div className="ad-space h-24 md:h-full mb-6 md:mb-0 w-full">
+                Ad Space {isMobile ? 'Mobile' : 'Sidebar'} ({isMobile ? '320×50' : '300×600'})
+              </div>
             </div>
           </div>
         </div>
