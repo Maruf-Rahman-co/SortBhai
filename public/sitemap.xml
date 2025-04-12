@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://sortbhai.com/</loc>
+    <loc>${import.meta.env.VITE_SITE_URL || 'https://sortbhai.com'}/</loc>
     <lastmod>2024-03-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://sortbhai.com/about</loc>
+    <loc>${import.meta.env.VITE_SITE_URL || 'https://sortbhai.com'}/about</loc>
     <lastmod>2024-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sortbhai.com/contact</loc>
+    <loc>${import.meta.env.VITE_SITE_URL || 'https://sortbhai.com'}/contact</loc>
     <lastmod>2024-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://sortbhai.com/terms</loc>
+    <loc>${import.meta.env.VITE_SITE_URL || 'https://sortbhai.com'}/terms</loc>
     <lastmod>2024-03-26</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://sortbhai.com/privacy</loc>
+    <loc>${import.meta.env.VITE_SITE_URL || 'https://sortbhai.com'}/privacy</loc>
     <lastmod>2024-03-26</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
