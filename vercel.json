@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 {
   "rewrites": [
@@ -6,6 +7,8 @@
   ]
 }
 =======
+=======
+>>>>>>> Stashed changes
 {
   "version": 2,
   "builds": [
@@ -23,5 +26,9 @@
       "dest": "/index.html"
     }
   ]
+<<<<<<< Updated upstream
+} 
+>>>>>>> Stashed changes
+=======
 } 
 >>>>>>> Stashed changes
