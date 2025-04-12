@@ -1,19 +1,12 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import SEO from './components/SEO';
-import Index from "./pages/Index";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import Visualizer from "./pages/Visualizer";
-import Terms from "./pages/Terms";
-import Privacy from "./pages/Privacy";
-import Cookies from "./pages/Cookies";
-import NotFound from "./pages/NotFound";
 
 // Lazy load components for better performance
 const IndexPage = lazy(() => import("./pages/Index"));
@@ -44,6 +37,15 @@ const queryClient = new QueryClient({
   },
 });
 
+// ScrollToTop component to handle scroll position on route change
+const ScrollToTop = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [window.location.pathname]);
+  
+  return null;
+};
+
 const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
@@ -52,7 +54,8 @@ const App = () => (
           <SEO />
           <Toaster />
           <Sonner position="top-right" theme="dark" />
-          <HashRouter>
+          <BrowserRouter>
+            <ScrollToTop />
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
                 <Route path="/" element={<IndexPage />} />
@@ -65,7 +68,7 @@ const App = () => (
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>
-          </HashRouter>
+          </BrowserRouter>
         </div>
       </TooltipProvider>
     </QueryClientProvider>
